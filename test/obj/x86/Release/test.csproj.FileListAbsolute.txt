@@ -1,0 +1,3 @@
+/home/r3pl1c4nt/Projects/test/test/bin/Release/test.exe
+/home/r3pl1c4nt/Projects/test/test/obj/x86/Release/test.exe
+/home/r3pl1c4nt/Projects/test/test/obj/x86/Release/test.csprojAssemblyReference.cache

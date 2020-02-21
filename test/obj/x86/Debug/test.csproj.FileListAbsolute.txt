@@ -1,0 +1,5 @@
+/home/r3pl1c4nt/Projects/test/test/bin/Debug/test.exe
+/home/r3pl1c4nt/Projects/test/test/bin/Debug/test.pdb
+/home/r3pl1c4nt/Projects/test/test/obj/x86/Debug/test.csprojAssemblyReference.cache
+/home/r3pl1c4nt/Projects/test/test/obj/x86/Debug/test.exe
+/home/r3pl1c4nt/Projects/test/test/obj/x86/Debug/test.pdb
