@@ -12,31 +12,21 @@ namespace test
     {
         public static void Main(string[] args)
         {
-            string phone = "9201353975"; //without country code
+            string phone = ""; //without country code
 
-            /*for (int i = 0; i < 15; ++i)
-            {
-                string text = GetYaCode("https://taxi.yandex.ru/#auth");
-                string searchID = "],\"id\"";
-                int searchResult = text.IndexOf(searchID);
-                text = text.Substring(searchResult + 8, 32);
-                Console.WriteLine(text);
-                SendYaPOST("https://taxi.yandex.ru/3.0/auth", text, phone);
-                Thread.Sleep(7000);
-            }*/
             Yandex temp = new Yandex(phone);
             Tinder tinder = new Tinder(phone);
             Youla youla = new Youla(phone);
             Karusel karusel = new Karusel(phone);
-            YktRu yktru = new YktRu(phone);
 
-            for (int i = 0; i < 1; ++i)
+
+            for (int i = 0; i < 5; ++i)
             {
-                //temp.SendYaPOST();
-                //tinder.SendTinderPOST();
-                //youla.SendYoulaPOST();
+                temp.SendYaPOST();
+                tinder.SendTinderPOST();
+                youla.SendYoulaPOST();
                 //karusel.SendKaruselPOST();
-                yktru.SendYktRuPOST();
+
                 Thread.Sleep(5000);
             }
         }

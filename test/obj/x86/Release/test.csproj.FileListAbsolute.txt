@@ -1,3 +1,6 @@
 /home/r3pl1c4nt/Projects/test/test/bin/Release/test.exe
 /home/r3pl1c4nt/Projects/test/test/obj/x86/Release/test.exe
 /home/r3pl1c4nt/Projects/test/test/obj/x86/Release/test.csprojAssemblyReference.cache
+/home/r3pl1c4nt/Документы/GitHub/b0mb3r_test/test/bin/Release/test.exe
+/home/r3pl1c4nt/Документы/GitHub/b0mb3r_test/test/obj/x86/Release/test.csprojAssemblyReference.cache
+/home/r3pl1c4nt/Документы/GitHub/b0mb3r_test/test/obj/x86/Release/test.exe
