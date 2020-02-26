@@ -4,8 +4,6 @@ using System.IO;
 using System.Text;
 using System.Threading;
 
-
-
 namespace test
 {
     class MainClass
@@ -26,10 +24,10 @@ namespace test
 
             for (int i = 0; i < 1; ++i)
             {
-                //yandexTaxi.SendYaPOST();
-                //tinder.SendTinderPOST();
-                //youla.SendYoulaPOST();
-                //karusel.SendKaruselPOST();
+                yandexTaxi.SendYaTaxiPOST();
+                tinder.SendTinderPOST();
+                youla.SendYoulaPOST();
+                karusel.SendKaruselPOST();
                 //findclone.SendFindclone();
                 //belkaCar.SendBelkaCarPOST();
                 //yandexEda.SenYaEdaPOST();
