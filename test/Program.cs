@@ -33,10 +33,12 @@ namespace test
                 belkaCar.SendBelkaCarPOST();
                 yandexEda.SenYaEdaPOST();
                 salamPay.SendSalamPayPOST();
-                wink.SendWinkPOST();
+
                 okCupid.SendOkCupidPOST();
                 Thread.Sleep(7000);
             }
+
+            //for (int i = 0;)
         }
 
         public static void ShowAnswer(WebRequest request)
@@ -78,7 +80,7 @@ namespace test
                 id = readStream.ReadToEnd();
                 string searchID = "],\"id\"";
                 int searchResult = id.IndexOf(searchID);
-                id = id.Substring(searchResult + 8, 32);
+                id = id.Substring(searchResult + searchID.Length, 32);
                 response.Close();
                 readStream.Close();
             }
@@ -312,7 +314,7 @@ namespace test
                 id = readStream.ReadToEnd();
                 string searchID = "session_id\":\"";
                 int searchResult = id.IndexOf(searchID);
-                id = id.Substring(searchResult + 13, 54);
+                id = id.Substring(searchResult +searchID.Length, 54);
             }
         }
 
