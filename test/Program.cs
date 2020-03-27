@@ -3,6 +3,7 @@ using System.Net;
 using System.IO;
 using System.Text;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace test
 {
@@ -18,6 +19,7 @@ namespace test
         static YandexEda yandexEda = new YandexEda(basePhone);
         static SalamPay salamPay = new SalamPay(basePhone);
         static Wink wink = new Wink(basePhone);
+        static FDoctor fDoctor = new FDoctor(basePhone);
 
         public static void Main(string[] args)
         {
@@ -25,7 +27,7 @@ namespace test
             Thread delay30 = new Thread(() => Delay30s());
             Thread delay20 = new Thread(() => Delay20s());
 
-            delay60.Start();
+            //delay60.Start();
             //delay30.Start();
             //delay20.Start();
         }
@@ -71,6 +73,7 @@ namespace test
                 tinder.SendTinderPOST();
                 youla.SendYoulaPOST();
                 salamPay.SendSalamPayPOST();
+                fDoctor.SendFDoctorGET();
                 Thread.Sleep(20000);
             }
         }
@@ -100,9 +103,10 @@ namespace test
                         readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
                     }
                     id = readStream.ReadToEnd();
-                    string searchID = "false,\"id\":\"";
-                    int searchResult = id.IndexOf(searchID);
-                    id = id.Substring(searchResult + searchID.Length, 32);
+                    Regex searchID = new Regex(@"\Wid\W{3}\w{32}\W");
+                    id = searchID.Match(id).ToString();
+                    id = id.Substring(6, 32);
+
                     response.Close();
                     readStream.Close();
                 }
@@ -341,6 +345,26 @@ namespace test
             }
 
             private static string phone, id;
+        }
+
+        class FDoctor //interval < 5s
+        {
+            public FDoctor(string temp)
+            {
+                phone = "7" + temp;
+            }
+
+            public void SendFDoctorGET()
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://my.fdoctor.ru/ajax/auth-simple/send_sms.php?auth-phone=" + phone + "&PHONE=" + phone);
+
+                request.Method = "GET";
+                request.Headers["X-Requested-With"] = "XMLHttpRequest";
+
+                ShowAnswer(request);
+            }
+
+            private static string phone;
         }
     }
 }
