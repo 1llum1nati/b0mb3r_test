@@ -17,7 +17,6 @@ namespace test
         static Karusel karusel = new Karusel(basePhone);
         static BelkaCar belkaCar = new BelkaCar(basePhone);
         static YandexEda yandexEda = new YandexEda(basePhone);
-        static SalamPay salamPay = new SalamPay(basePhone);
         static Wink wink = new Wink(basePhone);
         static FDoctor fDoctor = new FDoctor(basePhone);
 
@@ -27,6 +26,7 @@ namespace test
             Thread delay30 = new Thread(() => Delay30s());
             Thread delay20 = new Thread(() => Delay20s());
 
+            GetIP();
             //delay60.Start();
             //delay30.Start();
             //delay20.Start();
@@ -41,11 +41,43 @@ namespace test
             }
         }
 
+        public static void GetIP()
+        {
+            string proxy = "31.14.131.70";
+            int port = 8080;
+            WebProxy myproxy = new WebProxy(proxy, port);
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://2ip.ru/");
+            request.Proxy = myproxy;
+            request.Method = "GET";
+
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                Stream receiveStream = response.GetResponseStream();
+                StreamReader readStream = null;
+                if (response.CharacterSet == null)
+                {
+                    readStream = new StreamReader(receiveStream);
+                }
+                else
+                {
+                    readStream = new StreamReader(receiveStream, Encoding.GetEncoding(response.CharacterSet));
+                }
+                string id = readStream.ReadToEnd();
+                Regex searchID = new Regex(@"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}");
+                id = searchID.Match(id).ToString();
+                Console.WriteLine(id);
+                response.Close();
+                readStream.Close();
+            }
+        }
+
         public static void Delay60s()
         {
             for (int i = 0; i < 1; ++i)
             {
-                Console.WriteLine("===== 60s delay =====");
+                Console.WriteLine(" ===== 60s delay =====");
                 yandexTaxi.SendYaTaxiPOST();
                 karusel.SendKaruselPOST();
                 belkaCar.SendBelkaCarPOST();
@@ -72,7 +104,6 @@ namespace test
                 Console.WriteLine("===== 20s delay =====");
                 tinder.SendTinderPOST();
                 youla.SendYoulaPOST();
-                salamPay.SendSalamPayPOST();
                 fDoctor.SendFDoctorGET();
                 Thread.Sleep(20000);
             }
@@ -255,32 +286,6 @@ namespace test
                 using (var streamWriter = new StreamWriter(request.GetRequestStream()))
                 {
                     string json = "{\"phone_number\":\"" + phone + "\"}";
-
-                    streamWriter.Write(json);
-                }
-
-                ShowAnswer(request);
-            }
-
-            private static string phone;
-        }
-
-        class SalamPay //interval 15s
-        {
-            public SalamPay(string temp)
-            {
-                phone = "7" + temp;
-            }
-
-            public void SendSalamPayPOST()
-            {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://app.salampay.com/api/system/sms/c549d0c2-ee78-4a98-659d-08d682a42b29");
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.Method = "POST";
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
-                {
-                    string json = "caller_number=" + phone;
 
                     streamWriter.Write(json);
                 }
