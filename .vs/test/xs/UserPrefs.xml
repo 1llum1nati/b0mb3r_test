@@ -1,8 +1,9 @@
 ﻿<Properties StartupConfiguration="{10B69223-15B7-4D3C-BE9F-93D51DF79039}|Default">
   <MonoDevelop.Ide.ItemProperties.test PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="test/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Исходный код недоступен">
     <Files>
-      <File FileName="test/Program.cs" Line="71" Column="57" />
+      <File FileName="test/Program.cs" Line="48" Column="10" />
+      <File FileName="Исходный код недоступен" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -18,7 +19,7 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|x86" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|x86" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>

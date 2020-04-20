@@ -26,7 +26,7 @@ namespace test
 
         public static void Main(string[] args)
         {
-            CustomInput();
+
             Thread delay60 = new Thread(() => Delay60s());
             Thread delay30 = new Thread(() => Delay30s());
             Thread delay20 = new Thread(() => Delay20s());
