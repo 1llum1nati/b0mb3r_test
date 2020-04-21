@@ -9,9 +9,8 @@ namespace test
 {
     class MainClass
     {
-        static string basePhone = "9190307566"; //without country code
-        static int amount = 1;
-
+        static string basePhone = "9029885784"; //without country code        
+        static int amount = 1;      
         static int aDelay60s = 5, aDelay30s = 1, aDelay20s = 3;
 
         static YandexTaxi yandexTaxi = new YandexTaxi(basePhone);
@@ -26,11 +25,10 @@ namespace test
 
         public static void Main(string[] args)
         {
-
+            CustomInput();
             Thread delay60 = new Thread(() => Delay60s());
             Thread delay30 = new Thread(() => Delay30s());
             Thread delay20 = new Thread(() => Delay20s());
-
             //GetIP();
 
             delay60.Start();
@@ -41,7 +39,7 @@ namespace test
         public static void CustomInput()
         {
             Console.WriteLine("Введите номер без кода страны:");
-            basePhone = Console.ReadLine();
+            basePhone = Console.In.ReadLine();
             Console.WriteLine("Введите количество итераций:");
             amount = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine($"Итоговое количество сообщений - {aDelay60s * amount} + {aDelay30s * amount * 2} + {aDelay20s * amount * 3} = {amount * (aDelay60s + aDelay30s * 2 + aDelay20s *3)}");
@@ -49,18 +47,18 @@ namespace test
 
         public static void ShowAnswer(WebRequest request)
         {
-            var response = (HttpWebResponse)request.GetResponse();
-            if (response.StatusCode == HttpStatusCode.OK)
+            try
             {
+                var response = (HttpWebResponse)request.GetResponse();
+
                 using (var streamReader = new StreamReader(response.GetResponseStream()))
                 {
                     var result = streamReader.ReadToEnd(); Console.WriteLine(result);
                 }
             }
-            else
-
+            catch(WebException e)
             {
-                Console.WriteLine($"Ошибка! {response.Server}  {response.StatusCode}");
+                Console.WriteLine($"Ошибка! ShowAnswer: " + e.Message);
             }
         }
 
