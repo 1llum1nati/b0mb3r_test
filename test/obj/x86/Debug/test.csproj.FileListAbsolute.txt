@@ -7,3 +7,4 @@
 /home/r3pl1c4nt/Documents/GitHub/b0mb3r_test/test/bin/Debug/test.pdb
 /home/r3pl1c4nt/Documents/GitHub/b0mb3r_test/test/obj/x86/Debug/test.exe
 /home/r3pl1c4nt/Documents/GitHub/b0mb3r_test/test/obj/x86/Debug/test.pdb
+/home/r3pl1c4nt/Documents/GitHub/b0mb3r_test/test/obj/x86/Debug/test.csprojAssemblyReference.cache

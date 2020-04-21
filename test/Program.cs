@@ -39,7 +39,7 @@ namespace test
         public static void CustomInput()
         {
             Console.WriteLine("Введите номер без кода страны:");
-            basePhone = Console.In.ReadLine();
+            basePhone = Console.ReadLine();
             Console.WriteLine("Введите количество итераций:");
             amount = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine($"Итоговое количество сообщений - {aDelay60s * amount} + {aDelay30s * amount * 2} + {aDelay20s * amount * 3} = {amount * (aDelay60s + aDelay30s * 2 + aDelay20s *3)}");
